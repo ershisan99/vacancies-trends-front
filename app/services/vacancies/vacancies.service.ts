@@ -1,11 +1,14 @@
 import { Vacancies, VacancyData } from '~/services/vacancies/vacancies.types'
 
 export class VacanciesService {
+  baseUrl = 'https://vacancies-trends-api.onrender.com'
+
   async getAll(): Promise<Vacancies> {
-    return await fetch('http://localhost:4321/vacancies').then(res => res.json())
+    return await fetch(`${this.baseUrl}/vacancies`).then(res => res.json())
   }
+
   async getAggregateByCreatedAt(): Promise<VacancyData> {
-    return await fetch('http://localhost:4321/vacancies/aggregated')
+    return await fetch(`${this.baseUrl}/vacancies/aggregated`)
       .then(res => res.json())
       .then(this.formatDateOnData)
   }
@@ -14,7 +17,7 @@ export class VacanciesService {
     return data.map(item => {
       return {
         ...item,
-        date: new Date(item.date).toLocaleTimeString('ru'),
+        date: new Date(item.date).toLocaleDateString('ru'),
       }
     })
   }
