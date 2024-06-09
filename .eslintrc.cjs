@@ -71,6 +71,17 @@ module.exports = {
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],
+      rules:{
+        "@typescript-eslint/ban-ts-comment": [
+          "error",
+          {
+            "ts-expect-error":false,
+            "ts-ignore": "allow-with-description",
+            "ts-nocheck": "allow-with-description",
+            "ts-check": "allow-with-description"
+          }
+        ],
+      }
     },
 
     // Node
@@ -80,5 +91,6 @@ module.exports = {
         node: true,
       },
     },
+
   ],
 };
