@@ -1,7 +1,7 @@
 import { Vacancies, VacancyData } from '~/services/vacancies/vacancies.types'
 
 export class VacanciesService {
-  baseUrl = 'https://vacancies-trends-api.onrender.com'
+  baseUrl = 'https://vacancies-trends-api.andrii.es'
 
   async getAll(): Promise<Vacancies> {
     return await fetch(`${this.baseUrl}/vacancies`).then(res => res.json())
