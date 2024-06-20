@@ -15,11 +15,13 @@ export function Layout({ children }: PropsWithChildren) {
         <Links />
       </head>
       <body className={'h-full'}>
-        <header className={'p-4 bg-gray-50 dark:bg-gray-900 fixed w-full z-10'}>
+        <header className={'p-4 px-10 bg-gray-50 dark:bg-gray-900 fixed w-full z-10'}>
           <nav>
             <ul className={'flex gap-4'}>
               <li>
-                <Link to={'/'}>Home</Link>
+                <Link to={'/'} className={'text-xl hover:underline'}>
+                  Home
+                </Link>
               </li>
             </ul>
           </nav>

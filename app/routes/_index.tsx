@@ -21,9 +21,11 @@ export const loader = async () => {
 
 export default function Index() {
   const { keywords } = useLoaderData<typeof loader>()
+
   return (
     <div>
       <h1 className={'text-2xl font-semibold mb-6'}>Compare vacancies trends over time</h1>
+      <h2 className={'text-lg mb-2'}>Select a preset:</h2>
       <div className={'flex flex-col gap-2'} role={'list'}>
         {Object.entries(keywords?.presets ?? {}).map(([label, values]) => {
           if (values.length === 0) return null
@@ -32,7 +34,7 @@ export default function Index() {
             <Tooltip content={<TooltipContent values={values} />} key={label}>
               <Link
                 role={'listitem'}
-                className={'text-blue-300 hover:underline w-max'}
+                className={'text-sky-500 hover:underline w-max'}
                 to={{
                   pathname: '/trends',
                   search: new URLSearchParams({
