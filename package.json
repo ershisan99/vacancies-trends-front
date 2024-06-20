@@ -49,5 +49,6 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "prettier": "@it-incubator/prettier-config"
+  "prettier": "@it-incubator/prettier-config",
+  "packageManager": "pnpm@9.1.1"
 }
