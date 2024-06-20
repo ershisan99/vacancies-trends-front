@@ -3,6 +3,7 @@ import colors from 'tailwindcss/colors'
 import defaultTheme from 'tailwindcss/defaultTheme'
 
 export default {
+  darkMode: 'selector',
   content: [
     './app/**/*.{js,jsx,ts,tsx}',
 
