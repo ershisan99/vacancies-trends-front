@@ -8,15 +8,22 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({ nextParams }) => {
   return !nextParams
 }
 export const meta: MetaFunction = () => {
-  return [{ title: 'New Remix App' }, { name: 'description', content: 'Welcome to Remix!' }]
+  return [
+    { title: 'Vacancies trends' },
+    { name: 'description', content: 'See how software vacancies change over time' },
+  ]
 }
 
 export const loader = async () => {
-  const vacancies = await vacanciesService.getAggregateByCreatedAt()
-  return json({ vacancies })
+  const promises = [
+    vacanciesService.getAggregateByCreatedAt(),
+    vacanciesService.getKeywords(),
+  ] as const
+  const [vacancies, keywords] = await Promise.all(promises)
+  return json({ vacancies, keywords })
 }
 
 export default function Index() {
-  const { vacancies } = useLoaderData<typeof loader>()
-  return <VacanciesChart data={vacancies} />
+  const { vacancies, keywords } = useLoaderData<typeof loader>()
+  return <VacanciesChart data={vacancies} keywords={keywords} />
 }

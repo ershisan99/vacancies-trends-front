@@ -8,4 +8,13 @@ export interface VacancyDataEntry {
   vacancies: number
 }
 
-export type VacancyData = Array<{ date: string; [key: string]: string | number }>
+export type VacancyData = {
+  categories: string[]
+  data: Array<{ date: string; [key: string]: string | number }>
+}
+
+export type KeywordsResponse = {
+  allKeywords: string[]
+  keywords: Record<string, string[]>
+  presets: Record<string, string[]>
+}
