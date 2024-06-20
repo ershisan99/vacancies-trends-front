@@ -1,12 +1,12 @@
 import { json, MetaFunction } from '@remix-run/node'
 import { vacanciesService } from '~/services/vacancies/vacancies.service'
-import { useLoaderData } from '@remix-run/react'
-import { VacanciesChart } from '~/components/vacancies-chart'
-import type { ShouldRevalidateFunction } from '@remix-run/react'
+import { Link, ShouldRevalidateFunction, useLoaderData } from '@remix-run/react'
+import { Tooltip } from '~/components/ui/tooltip'
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({ nextParams }) => {
   return !nextParams
 }
+
 export const meta: MetaFunction = () => {
   return [
     { title: 'Vacancies trends' },
@@ -15,15 +15,48 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader = async () => {
-  const promises = [
-    vacanciesService.getAggregateByCreatedAt(),
-    vacanciesService.getKeywords(),
-  ] as const
-  const [vacancies, keywords] = await Promise.all(promises)
-  return json({ vacancies, keywords })
+  const keywords = await vacanciesService.getKeywords()
+  return json({ keywords })
 }
 
 export default function Index() {
-  const { vacancies, keywords } = useLoaderData<typeof loader>()
-  return <VacanciesChart data={vacancies} keywords={keywords} />
+  const { keywords } = useLoaderData<typeof loader>()
+  return (
+    <div>
+      <h1 className={'text-2xl font-semibold mb-6'}>Compare vacancies trends over time</h1>
+      <div className={'flex flex-col gap-2'} role={'list'}>
+        {Object.entries(keywords?.presets ?? {}).map(([label, values]) => {
+          if (values.length === 0) return null
+
+          return (
+            <Tooltip content={<TooltipContent values={values} />} key={label}>
+              <Link
+                role={'listitem'}
+                className={'text-blue-300 hover:underline w-max'}
+                to={{
+                  pathname: '/trends',
+                  search: new URLSearchParams({
+                    preset: label,
+                    categories: values.join(','),
+                  }).toString(),
+                }}
+              >
+                {label}
+              </Link>
+            </Tooltip>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+const TooltipContent = ({ values }: { values: string[] }) => {
+  return (
+    <div>
+      {[...values].sort().map(v => (
+        <div key={v}>{v}</div>
+      ))}
+    </div>
+  )
 }

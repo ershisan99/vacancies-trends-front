@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { KeywordsResponse, VacancyData } from '~/services/vacancies/vacancies.types'
 import { AreaChart, MultiSelect, MultiSelectItem, Select, SelectItem } from '@tremor/react'
 import { useSearchParams } from '@remix-run/react'
@@ -10,7 +10,6 @@ type Props = {
 
 export function VacanciesChart({ data, keywords }: Props) {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [preset, setPreset] = useState('None')
 
   const presetsForSelect = useMemo(
     () =>
@@ -27,6 +26,23 @@ export function VacanciesChart({ data, keywords }: Props) {
   const selectedCategories = useMemo(
     () => searchParams.get('categories')?.split(',') || [],
     [searchParams]
+  )
+
+  const preset = useMemo(() => {
+    return searchParams.get('preset') ?? 'None'
+  }, [searchParams])
+
+  const setPreset = useCallback(
+    (value: string | null) => {
+      if (!value || value === 'None') {
+        searchParams.delete('preset')
+      } else {
+        searchParams.set('preset', value)
+      }
+
+      setSearchParams(searchParams)
+    },
+    [searchParams, setSearchParams]
   )
 
   const categoriesForChart = useMemo(() => {
@@ -64,14 +80,15 @@ export function VacanciesChart({ data, keywords }: Props) {
       setPreset(value)
       setSelectedCategories(keywords?.presets[value] ?? [])
     },
-    [keywords?.presets, setSelectedCategories]
+    [keywords?.presets, setSelectedCategories, setPreset]
   )
 
   const handleKeywordsChange = useCallback(
     (value: string[]) => {
       setSelectedCategories(value ?? [])
+      setPreset(null)
     },
-    [setSelectedCategories]
+    [setSelectedCategories, setPreset]
   )
 
   const multiSelectItems = useMemo(() => {
@@ -87,7 +104,7 @@ export function VacanciesChart({ data, keywords }: Props) {
   }, [presetsForSelect])
 
   return (
-    <div className={'flex h-full flex-col gap-6 p-8'}>
+    <>
       <div className={'flex gap-4'}>
         <div className="max-w-xl">
           <label
@@ -131,7 +148,8 @@ export function VacanciesChart({ data, keywords }: Props) {
         startEndOnly={false}
         intervalType="preserveStartEnd"
         showAnimation
+        noDataText={'Nothing here, try selecting different categories or preset'}
       />
-    </div>
+    </>
   )
 }
