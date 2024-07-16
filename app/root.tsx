@@ -1,7 +1,16 @@
 import { LinksFunction } from '@remix-run/node'
-import { Link, Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
+import {
+  Link,
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLocation,
+} from '@remix-run/react'
 import stylesheet from '~/tailwind.css?url'
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useEffect } from 'react'
+import posthog from 'posthog-js'
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }]
 
@@ -35,5 +44,18 @@ export function Layout({ children }: PropsWithChildren) {
 }
 
 export default function App() {
-  return <Outlet />
+  return (
+    <>
+      <CapturePageView />
+      <Outlet />
+    </>
+  )
+}
+
+function CapturePageView() {
+  const location = useLocation()
+  useEffect(() => {
+    posthog.capture('$pageview')
+  }, [location])
+  return null
 }

@@ -21,6 +21,7 @@
     "@tremor/react": "^3.17.2",
     "clsx": "^2.1.1",
     "isbot": "^4.1.0",
+    "posthog-js": "^1.148.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^2.3.0"
