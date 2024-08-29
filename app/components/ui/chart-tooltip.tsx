@@ -71,7 +71,6 @@ export const ChartTooltipRow = ({ value, name, color }: ChartTooltipRowProps) =>
 const ChartTooltip = ({
   active,
   payload,
-  label,
   groupBy,
 }: CustomTooltipProps & {
   rawDate: string
@@ -79,7 +78,6 @@ const ChartTooltip = ({
 }) => {
   if (active && payload) {
     const rawDate = payload[0]?.payload?.rawDate
-    console.log(payload, rawDate)
     const filteredPayload = payload.filter((item: any) => item.type !== 'none')
 
     return (
