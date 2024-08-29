@@ -18,3 +18,10 @@ export type KeywordsResponse = {
   keywords: Record<string, string[]>
   presets: Record<string, string[]>
 }
+
+export enum GroupByPeriod {
+  DAY = 'day',
+  WEEK = 'week',
+  MONTH = 'month',
+  YEAR = 'year',
+}

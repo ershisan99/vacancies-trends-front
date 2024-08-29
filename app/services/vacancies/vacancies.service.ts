@@ -1,16 +1,34 @@
-import { KeywordsResponse, Vacancies, VacancyData } from '~/services/vacancies/vacancies.types'
+import {
+  GroupByPeriod,
+  KeywordsResponse,
+  Vacancies,
+  VacancyData,
+} from '~/services/vacancies/vacancies.types'
 
 export class VacanciesService {
-  baseUrl = process.env.VACANCIES_API_URL ?? 'https://vacancies-trends-api.andrii.es'
+  baseUrl = process.env.VITE_VACANCIES_API_URL ?? 'https://vacancies-trends-api.andrii.es'
 
-  async getAll(): Promise<Vacancies> {
-    return await fetch(`${this.baseUrl}/vacancies`).then(res => res.json())
+  async getAll(args?: { groupBy?: GroupByPeriod }): Promise<Vacancies> {
+    const groupBy = args?.groupBy ?? GroupByPeriod.DAY
+    const params = new URLSearchParams({
+      groupBy,
+    })
+
+    const url = new URL(`${this.baseUrl}/vacancies`)
+    url.search = params.toString()
+    return await fetch(url.toString()).then(res => res.json())
   }
 
-  async getAggregateByCreatedAt(): Promise<VacancyData> {
-    return await fetch(`${this.baseUrl}/vacancies/aggregated`)
-      .then(res => res.json())
-      .then(this.formatDateOnData)
+  async getAggregateByCreatedAt(args?: { groupBy?: GroupByPeriod }): Promise<VacancyData> {
+    const groupBy = args?.groupBy ?? GroupByPeriod.DAY
+
+    const params = new URLSearchParams({
+      groupBy,
+    })
+    const url = new URL(`${this.baseUrl}/vacancies/aggregated`)
+    url.search = params.toString()
+
+    return await fetch(url).then(res => res.json())
   }
 
   async getKeywords(): Promise<KeywordsResponse> {
