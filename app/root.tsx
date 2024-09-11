@@ -7,11 +7,20 @@ import {
   Scripts,
   ScrollRestoration,
   useLocation,
+  useRouteError,
 } from '@remix-run/react'
 import stylesheet from '~/tailwind.css?url'
 import { PropsWithChildren, useEffect } from 'react'
 import posthog from 'posthog-js'
+import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix'
 
+export const ErrorBoundary = () => {
+  const error = useRouteError()
+
+  captureRemixErrorBoundaryError(error)
+
+  return <div>Something went wrong. Please try again later.</div>
+}
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }]
 
 export function Layout({ children }: PropsWithChildren) {
@@ -43,7 +52,7 @@ export function Layout({ children }: PropsWithChildren) {
   )
 }
 
-export default function App() {
+function App() {
   return (
     <>
       <CapturePageView />
@@ -51,6 +60,8 @@ export default function App() {
     </>
   )
 }
+
+export default withSentry(App)
 
 function CapturePageView() {
   const location = useLocation()

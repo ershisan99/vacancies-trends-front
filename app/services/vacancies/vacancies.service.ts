@@ -32,7 +32,10 @@ export class VacanciesService {
   }
 
   async getKeywords(): Promise<KeywordsResponse> {
-    return await fetch(`${this.baseUrl}/vacancies/keywords`).then(res => res.json())
+    return await fetch(`${this.baseUrl}/vacancies/keywords`).then(res => {
+      if (!res.ok) throw new Error('Failed to fetch keywords')
+      return res.json()
+    })
   }
 
   private formatDateOnData(data: VacancyData): VacancyData {
