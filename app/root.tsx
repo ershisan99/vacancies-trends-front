@@ -11,13 +11,10 @@ import {
 } from '@remix-run/react'
 import stylesheet from '~/tailwind.css?url'
 import { PropsWithChildren, useEffect } from 'react'
-import posthog from 'posthog-js'
-import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix'
 
 export const ErrorBoundary = () => {
   const error = useRouteError()
 
-  captureRemixErrorBoundaryError(error)
 
   return <div>Something went wrong. Please try again later.</div>
 }
@@ -54,19 +51,8 @@ export function Layout({ children }: PropsWithChildren) {
 
 function App() {
   return (
-    <>
-      <CapturePageView />
       <Outlet />
-    </>
   )
 }
 
-export default withSentry(App)
-
-function CapturePageView() {
-  const location = useLocation()
-  useEffect(() => {
-    posthog.capture('$pageview')
-  }, [location])
-  return null
-}
+export default App
