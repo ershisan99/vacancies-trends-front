@@ -31,7 +31,7 @@ export default function Index() {
           if (values.length === 0) return null
 
           return (
-            <Tooltip content={<TooltipContent values={values} />} key={label}>
+            // <Tooltip content={<TooltipContent values={values} />} key={label}>
               <Link
                 role={'listitem'}
                 className={'text-sky-500 hover:underline w-max'}
@@ -45,7 +45,7 @@ export default function Index() {
               >
                 {label}
               </Link>
-            </Tooltip>
+            // </Tooltip>
           )
         })}
       </div>
